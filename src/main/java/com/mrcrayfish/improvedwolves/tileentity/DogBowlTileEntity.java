@@ -26,12 +26,6 @@ public class DogBowlTileEntity extends BasicLootTileEntity
     }
 
     @Override
-    public void read(CompoundNBT compound)
-    {
-        super.read(compound);
-    }
-
-    @Override
     public int getSizeInventory()
     {
         return 1;
@@ -47,12 +41,6 @@ public class DogBowlTileEntity extends BasicLootTileEntity
     protected Container createMenu(int windowId, PlayerInventory playerInventory)
     {
         return new DogBowlContainer(windowId, playerInventory, this);
-    }
-
-    @Override
-    public CompoundNBT write(CompoundNBT compound)
-    {
-        return super.write(compound);
     }
 
     @Override

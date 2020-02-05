@@ -1,6 +1,7 @@
 package com.mrcrayfish.improvedwolves.block;
 
 import com.mrcrayfish.improvedwolves.tileentity.DogBowlTileEntity;
+import com.mrcrayfish.improvedwolves.util.TileEntityUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -72,6 +74,20 @@ public class DogBowlBlock extends HorizontalBlock implements IWaterLoggable
             }
         }
         return ActionResultType.SUCCESS;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
+    {
+        if(stack.hasDisplayName())
+        {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if(tileentity instanceof DogBowlTileEntity)
+            {
+                ((DogBowlTileEntity) tileentity).setCustomName(stack.getDisplayName());
+                TileEntityUtil.sendUpdatePacket(tileentity);
+            }
+        }
     }
 
     @Override
