@@ -125,6 +125,14 @@ public class MoveToDogBowlGoal extends Goal
             TileEntity tileEntity = this.entity.getEntityWorld().getTileEntity(bowlPos);
             if(tileEntity instanceof DogBowlTileEntity)
             {
+                DogBowlTileEntity dogBowlTileEntity = (DogBowlTileEntity) tileEntity;
+                if(dogBowlTileEntity.hasCustomName())
+                {
+                    if(!dogBowlTileEntity.getName().getUnformattedComponentText().equals(this.entity.getName().getUnformattedComponentText()))
+                    {
+                        return;
+                    }
+                }
                 this.bowlPos = bowlPos;
                 this.bowlTileEntity = (DogBowlTileEntity) tileEntity;
             }
