@@ -1,7 +1,6 @@
 package com.mrcrayfish.improvedwolves;
 
 import com.mrcrayfish.improvedwolves.entity.ai.goal.MoveToDogBowlGoal;
-import com.mrcrayfish.improvedwolves.entity.ai.goal.TestGoal;
 import com.mrcrayfish.improvedwolves.init.ModBlocks;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.WolfEntity;
