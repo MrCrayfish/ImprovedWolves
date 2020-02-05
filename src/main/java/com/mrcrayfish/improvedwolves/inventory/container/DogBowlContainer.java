@@ -1,19 +1,25 @@
 package com.mrcrayfish.improvedwolves.inventory.container;
 
 import com.mrcrayfish.improvedwolves.init.ModContainers;
+import com.mrcrayfish.improvedwolves.tileentity.DogBowlTileEntity;
+import com.mrcrayfish.improvedwolves.util.TileEntityUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 
 /**
  * Author: MrCrayfish
  */
 public class DogBowlContainer extends Container
 {
+    private PlayerInventory playerInventory;
     private IInventory inventory;
 
     public DogBowlContainer(int windowId, PlayerInventory playerInventory)
@@ -27,6 +33,7 @@ public class DogBowlContainer extends Container
         assertInventorySize(inventory, 1);
         inventory.openInventory(playerInventory.player);
         this.inventory = inventory;
+        this.playerInventory = playerInventory;
 
         this.addSlot(new SlotDogBowl(inventory, 0, 80, 20));
 
@@ -42,6 +49,24 @@ public class DogBowlContainer extends Container
         {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 109));
         }
+
+        this.addListener(new IContainerListener()
+        {
+            @Override
+            public void sendAllContents(Container containerToSend, NonNullList<ItemStack> itemsList) {}
+
+            @Override
+            public void sendSlotContents(Container containerToSend, int slotInd, ItemStack stack)
+            {
+                if(slotInd == 0 && inventory instanceof DogBowlTileEntity)
+                {
+                    TileEntityUtil.sendUpdatePacket((DogBowlTileEntity) inventory);
+                }
+            }
+
+            @Override
+            public void sendWindowProperty(Container containerIn, int varToUpdate, int newValue) {}
+        });
     }
 
     @Override

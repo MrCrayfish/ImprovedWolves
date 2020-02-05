@@ -2,12 +2,13 @@ package com.mrcrayfish.improvedwolves.tileentity;
 
 import com.mrcrayfish.improvedwolves.init.ModTileEntities;
 import com.mrcrayfish.improvedwolves.inventory.container.DogBowlContainer;
+import com.mrcrayfish.improvedwolves.util.TileEntityUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -70,5 +71,15 @@ public class DogBowlTileEntity extends BasicLootTileEntity
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
     {
         this.read(pkt.getNbtCompound());
+    }
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack)
+    {
+        super.setInventorySlotContents(index, stack);
+        /*if(this.world != null && !this.world.isRemote)
+        {
+            TileEntityUtil.sendUpdatePacket(this);
+        }*/
     }
 }
