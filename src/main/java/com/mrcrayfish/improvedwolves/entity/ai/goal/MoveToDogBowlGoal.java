@@ -47,7 +47,6 @@ public class MoveToDogBowlGoal extends Goal
     public void startExecuting()
     {
         this.entity.getNavigator().tryMoveToXYZ(this.bowlPos.getX() + 0.5, this.bowlPos.getY(), this.bowlPos.getZ() + 0.5, 1);
-        System.out.println("Moving to " + this.bowlPos);
     }
 
     @Override
