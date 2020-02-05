@@ -1,5 +1,6 @@
 package com.mrcrayfish.improvedwolves.entity.ai.goal;
 
+import com.mrcrayfish.improvedwolves.block.DogBowlBlock;
 import com.mrcrayfish.improvedwolves.init.ModBlocks;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.TameableEntity;
@@ -102,7 +103,7 @@ public class MoveToDogBowlGoal extends Goal
         BlockPos center = new BlockPos(this.entity);
         List<BlockPos> dogBowls = new ArrayList<>();
         BlockPos.getAllInBox(center.add(-10, -10, -10), center.add(10, 10, 10)).forEach(pos -> {
-            if(this.entity.getEntityWorld().getBlockState(pos).getBlock() == ModBlocks.DOG_BOWL)
+            if(this.entity.getEntityWorld().getBlockState(pos).getBlock() instanceof DogBowlBlock)
             {
                 dogBowls.add(pos.toImmutable());
             }
