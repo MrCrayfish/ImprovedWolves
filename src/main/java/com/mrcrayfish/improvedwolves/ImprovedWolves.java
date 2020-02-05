@@ -54,7 +54,7 @@ public class ImprovedWolves
         if(entity instanceof WolfEntity)
         {
             WolfEntity wolfEntity = (WolfEntity) entity;
-            wolfEntity.goalSelector.addGoal(1, new MoveToDogBowlGoal(wolfEntity));
+            wolfEntity.goalSelector.addGoal(6, new MoveToDogBowlGoal(wolfEntity));
         }
     }
 }
