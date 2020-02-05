@@ -2,12 +2,15 @@ package com.mrcrayfish.improvedwolves.entity.ai.goal;
 
 import com.mrcrayfish.improvedwolves.block.DogBowlBlock;
 import com.mrcrayfish.improvedwolves.init.ModBlocks;
+import com.mrcrayfish.improvedwolves.tileentity.DogBowlTileEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,6 +28,7 @@ public class MoveToDogBowlGoal extends Goal
 {
     private int eatingTicks;
     private BlockPos bowlPos;
+    private DogBowlTileEntity bowlTileEntity;
     private TameableEntity entity;
 
     public MoveToDogBowlGoal(TameableEntity entity)
@@ -41,7 +45,7 @@ public class MoveToDogBowlGoal extends Goal
             return false;
         }
         this.findNearestDogBowl();
-        return this.bowlPos != null;
+        return this.bowlPos != null && this.bowlTileEntity != null && !this.bowlTileEntity.isRemoved() && this.bowlTileEntity.hasFood();
     }
 
     @Override
@@ -53,11 +57,11 @@ public class MoveToDogBowlGoal extends Goal
     @Override
     public void tick()
     {
-        if(!this.bowlPos.withinDistance(this.entity.getPositionVec(), 1.5))
+        if(!this.bowlPos.withinDistance(this.entity.getPositionVec(), 1.2))
         {
             this.entity.getNavigator().tryMoveToXYZ(this.bowlPos.getX() + 0.5, this.bowlPos.getY(), this.bowlPos.getZ() + 0.5, 1);
         }
-        else
+        else if(!this.bowlTileEntity.isRemoved() && this.bowlTileEntity.hasFood())
         {
             this.entity.getNavigator().clearPath();
             this.entity.getLookController().setLookPosition(this.bowlPos.getX() + 0.5, this.bowlPos.getY(), this.bowlPos.getZ() + 0.5);
@@ -65,7 +69,12 @@ public class MoveToDogBowlGoal extends Goal
             if(this.eatingTicks == 20)
             {
                 //TODO make this depend on the food
-                this.entity.setHealth(this.entity.getMaxHealth());
+                Food food = this.bowlTileEntity.getFood();
+                if(food != null)
+                {
+                    this.entity.setHealth(this.entity.getHealth() + food.getHealing());
+                    this.bowlTileEntity.consumeFood();
+                }
                 this.eatingTicks = 0;
             }
             else
@@ -88,7 +97,7 @@ public class MoveToDogBowlGoal extends Goal
     @Override
     public boolean shouldContinueExecuting()
     {
-        return this.entity.getHealth() < this.entity.getMaxHealth();
+        return this.entity.getHealth() < this.entity.getMaxHealth() && !this.bowlTileEntity.isRemoved() && this.bowlTileEntity.hasFood(); //TODO stop executing if dog bowl is empty
     }
 
     @Override
@@ -96,18 +105,29 @@ public class MoveToDogBowlGoal extends Goal
     {
         this.eatingTicks = 0;
         this.bowlPos = null;
+        this.bowlTileEntity = null;
     }
 
     private void findNearestDogBowl()
     {
         BlockPos center = new BlockPos(this.entity);
         List<BlockPos> dogBowls = new ArrayList<>();
-        BlockPos.getAllInBox(center.add(-10, -10, -10), center.add(10, 10, 10)).forEach(pos -> {
+        BlockPos.getAllInBox(center.add(-10, -10, -10), center.add(10, 10, 10)).forEach(pos ->
+        {
             if(this.entity.getEntityWorld().getBlockState(pos).getBlock() instanceof DogBowlBlock)
             {
                 dogBowls.add(pos.toImmutable());
             }
         });
-        this.bowlPos = dogBowls.stream().min(Comparator.comparing(pos -> pos.manhattanDistance(center))).orElse(null);
+        BlockPos bowlPos = dogBowls.stream().min(Comparator.comparing(pos -> pos.manhattanDistance(center))).orElse(null);
+        if(bowlPos != null)
+        {
+            TileEntity tileEntity = this.entity.getEntityWorld().getTileEntity(bowlPos);
+            if(tileEntity instanceof DogBowlTileEntity)
+            {
+                this.bowlPos = bowlPos;
+                this.bowlTileEntity = (DogBowlTileEntity) tileEntity;
+            }
+        }
     }
 }

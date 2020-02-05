@@ -5,6 +5,7 @@ import com.mrcrayfish.improvedwolves.inventory.container.DogBowlContainer;
 import com.mrcrayfish.improvedwolves.util.TileEntityUtil;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -73,13 +74,30 @@ public class DogBowlTileEntity extends BasicLootTileEntity
         this.read(pkt.getNbtCompound());
     }
 
-    @Override
-    public void setInventorySlotContents(int index, ItemStack stack)
+    public boolean hasFood()
     {
-        super.setInventorySlotContents(index, stack);
-        /*if(this.world != null && !this.world.isRemote)
+        ItemStack stack = this.getStackInSlot(0);
+        return !stack.isEmpty() && stack.getItem().getFood() != null;
+    }
+
+    @Nullable
+    public Food getFood()
+    {
+        ItemStack stack = this.getStackInSlot(0);
+        if(!stack.isEmpty())
         {
+            return stack.getItem().getFood();
+        }
+        return null;
+    }
+
+    public void consumeFood()
+    {
+        ItemStack stack = this.getStackInSlot(0);
+        if(!stack.isEmpty())
+        {
+            stack.shrink(1);
             TileEntityUtil.sendUpdatePacket(this);
-        }*/
+        }
     }
 }
