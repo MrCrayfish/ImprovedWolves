@@ -252,6 +252,7 @@ public class PutInChestGoal extends Goal
                                 handler2.setItemStack(ItemStack.EMPTY);
                                 this.owner.getDataManager().set(CustomDataParameters.COMMANDING_WOLF, Optional.empty());
                                 this.state = State.FINISHED;
+                                this.entity.world.playSound(null, this.entity.getPosX(), this.entity.getPosY() + this.entity.getEyeHeight(), this.entity.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                                 return;
                             }
                         }
