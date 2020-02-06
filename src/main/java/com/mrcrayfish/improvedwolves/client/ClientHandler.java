@@ -92,6 +92,7 @@ public class ClientHandler
                 matrix.translate(-1 * 0.0625, 0, 7 * 0.0625);
                 matrix.rotate(Vector3f.YN.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
                 matrix.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), -wolf.prevRotationYawHead, -wolf.rotationYawHead)));
+                matrix.rotate(Vector3f.XP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), wolf.prevRotationPitch, wolf.rotationPitch)));
                 matrix.translate(1 * 0.0625, 8.5 * 0.0625, 5 * 0.0625);
                 if(heldItem.getItem() instanceof BlockItem)
                 {
