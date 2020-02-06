@@ -1,0 +1,6 @@
+{
+    "entity.player.whistle": {
+        "subtitle": "subtitle.improvedwolves.entity.player.whistle",
+        "sounds": [ "improvedwolves:entity/player/whistle" ]
+    }
+}

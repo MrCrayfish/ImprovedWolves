@@ -2,6 +2,7 @@ package com.mrcrayfish.improvedwolves.network.message;
 
 import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
 import com.mrcrayfish.improvedwolves.init.ModMemoryModuleTypes;
+import com.mrcrayfish.improvedwolves.init.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -104,19 +105,19 @@ public class MessageWolfDepositItem implements IMessage<MessageWolfDepositItem>
                         if(world.getTileEntity(message.pos) instanceof IInventory && !brain.getMemory(ModMemoryModuleTypes.CHEST).get().getPos().equals(message.pos))
                         {
                             brain.setMemory(ModMemoryModuleTypes.CHEST, GlobalPos.of(player.dimension, message.pos));
-                            world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.ENTITY_PLAYER_WHISTLE, SoundCategory.PLAYERS, 1.0F, 1.0F);
                         }
                         else
                         {
                             brain.setMemory(ModMemoryModuleTypes.CHEST, Optional.empty());
-                            world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.ENTITY_PLAYER_WHISTLE, SoundCategory.PLAYERS, 1.0F, 0.5F);
                         }
                     }
                     else if(world.getTileEntity(message.pos) instanceof IInventory)
                     {
                         brain.setMemory(ModMemoryModuleTypes.CHEST, GlobalPos.of(player.dimension, message.pos));
                         commandingWolf.goalSelector.getRunningGoals().forEach(PrioritizedGoal::resetTask);
-                        world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                        world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.ENTITY_PLAYER_WHISTLE, SoundCategory.PLAYERS, 1.0F, 1.0F);
                     }
                 }
             }
