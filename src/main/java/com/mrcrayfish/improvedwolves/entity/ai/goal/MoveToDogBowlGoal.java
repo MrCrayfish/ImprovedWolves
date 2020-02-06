@@ -97,7 +97,7 @@ public class MoveToDogBowlGoal extends Goal
     @Override
     public boolean shouldContinueExecuting()
     {
-        return this.entity.getHealth() < this.entity.getMaxHealth() && !this.bowlTileEntity.isRemoved() && this.bowlTileEntity.hasFood(); //TODO stop executing if dog bowl is empty
+        return this.entity.getHealth() < this.entity.getMaxHealth() && !this.bowlTileEntity.isRemoved() && this.bowlTileEntity.hasFood();
     }
 
     @Override
