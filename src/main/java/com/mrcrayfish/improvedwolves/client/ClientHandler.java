@@ -64,11 +64,11 @@ public class ClientHandler
             if(Minecraft.getInstance().player != null)
             {
                 RayTraceResult result = Minecraft.getInstance().player.pick(20.0D, Minecraft.getInstance().getRenderPartialTicks(), false);
-                if(result.getType() == RayTraceResult.Type.BLOCK)
+                if(result.getType() == RayTraceResult.Type.BLOCK || result.getType() == RayTraceResult.Type.MISS)
                 {
                     BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) result;
                     BlockPos pos = blockRayTraceResult.getPos();
-                    if(pos.withinDistance(Minecraft.getInstance().player.getEyePosition(0F), 20.0D))
+                    if(result.getType() == RayTraceResult.Type.MISS || pos.withinDistance(Minecraft.getInstance().player.getEyePosition(0F), 20.0D))
                     {
                         PacketHandler.instance.sendToServer(new MessageWolfDepositItem(pos));
                     }
