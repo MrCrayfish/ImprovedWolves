@@ -34,7 +34,7 @@ public class MoveToDogBowlGoal extends Goal
     public MoveToDogBowlGoal(TameableEntity entity)
     {
         this.entity = entity;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Flag.LOOK));
     }
 
     @Override

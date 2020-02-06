@@ -1,19 +1,32 @@
 package com.mrcrayfish.improvedwolves.client;
 
+import com.mrcrayfish.improvedwolves.Reference;
 import com.mrcrayfish.improvedwolves.block.DogBowlBlock;
 import com.mrcrayfish.improvedwolves.client.render.tileentity.DogBowlRenderer;
 import com.mrcrayfish.improvedwolves.client.screen.DogBowlScreen;
 import com.mrcrayfish.improvedwolves.init.ModBlocks;
 import com.mrcrayfish.improvedwolves.init.ModContainers;
 import com.mrcrayfish.improvedwolves.init.ModTileEntities;
+import com.mrcrayfish.improvedwolves.network.PacketHandler;
+import com.mrcrayfish.improvedwolves.network.message.MessageWolfDepositItem;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Mod;
+import org.lwjgl.glfw.GLFW;
 
 /**
  * Author: MrCrayfish
  */
+@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class ClientHandler
 {
     public static void setup()
@@ -30,5 +43,26 @@ public class ClientHandler
 
         ScreenManager.registerFactory(ModContainers.DOG_BOWL, DogBowlScreen::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.DOG_BOWL, DogBowlRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onKeyPress(InputEvent.KeyInputEvent event)
+    {
+        if(event.getAction() == GLFW.GLFW_PRESS && event.getKey() == GLFW.GLFW_KEY_U)
+        {
+            if(Minecraft.getInstance().player != null)
+            {
+                RayTraceResult result = Minecraft.getInstance().player.pick(20.0D, Minecraft.getInstance().getRenderPartialTicks(), false);
+                if(result.getType() == RayTraceResult.Type.BLOCK)
+                {
+                    BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) result;
+                    BlockPos pos = blockRayTraceResult.getPos();
+                    if(pos.withinDistance(Minecraft.getInstance().player.getEyePosition(0F), 20.0D))
+                    {
+                        PacketHandler.instance.sendToServer(new MessageWolfDepositItem(pos));
+                    }
+                }
+            }
+        }
     }
 }
