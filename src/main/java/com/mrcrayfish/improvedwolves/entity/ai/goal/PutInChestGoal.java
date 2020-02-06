@@ -252,6 +252,8 @@ public class PutInChestGoal extends Goal
                             {
                                 PlayerInventory playerInventory = ((PlayerEntity) this.owner).inventory;
                                 playerInventory.placeItemBackInInventory(this.owner.world, stack);
+                                this.entity.getDataManager().set(CustomDataParameters.WOLF_HELD_ITEM, ItemStack.EMPTY);
+                                handler2.setItemStack(ItemStack.EMPTY);
                                 this.owner.getDataManager().set(CustomDataParameters.COMMANDING_WOLF, Optional.empty());
                                 this.state = State.FINISHED;
                                 return;
