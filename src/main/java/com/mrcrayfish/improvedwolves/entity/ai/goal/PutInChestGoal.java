@@ -17,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.MathHelper;
@@ -142,6 +144,7 @@ public class PutInChestGoal extends Goal
                         this.entity.getDataManager().set(CustomDataParameters.WOLF_HELD_ITEM, copy);
                         heldItem.shrink(copy.getCount());
                         this.state = State.PUT_ITEM_IN_CHEST;
+                        this.entity.world.playSound(null, this.entity.getPosX(), this.entity.getPosY() + this.entity.getEyeHeight(), this.entity.getPosZ(), SoundEvents.ENTITY_FOX_BITE, SoundCategory.NEUTRAL, 1.0F, 0.5F);
                         return;
                     }
                 }
@@ -175,7 +178,7 @@ public class PutInChestGoal extends Goal
                             if(!this.globalPos.getPos().withinDistance(this.entity.getPositionVec(), 1.5))
                             {
                                 this.entity.getLookController().setLookPosition(this.globalPos.getPos().getX() + 0.5, this.globalPos.getPos().getY() + 0.5, this.globalPos.getPos().getZ() + 0.5);
-                                if(!this.entity.getNavigator().tryMoveToXYZ(this.globalPos.getPos().getX() + 0.5, this.globalPos.getPos().getY(), this.globalPos.getPos().getZ() + 0.5, 1))
+                                if(!this.entity.getNavigator().tryMoveToXYZ(this.globalPos.getPos().getX() + 0.5, this.globalPos.getPos().getY(), this.globalPos.getPos().getZ() + 0.5, 1.0))
                                 {
                                     this.state = State.GIVE_ITEM_TO_PLAYER;
                                     return;
@@ -197,6 +200,7 @@ public class PutInChestGoal extends Goal
                                 handler.setItemStack(copy);
                                 this.entity.getDataManager().set(CustomDataParameters.WOLF_HELD_ITEM, copy);
                                 this.entity.getBrain().removeMemory(ModMemoryModuleTypes.CHEST);
+                                this.entity.world.playSound(null, this.entity.getPosX(), this.entity.getPosY() + this.entity.getEyeHeight(), this.entity.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 0.5F);
                                 return;
                             }
                         }
