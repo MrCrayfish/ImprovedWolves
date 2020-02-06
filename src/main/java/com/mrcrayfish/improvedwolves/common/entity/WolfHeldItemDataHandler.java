@@ -1,13 +1,19 @@
 package com.mrcrayfish.improvedwolves.common.entity;
 
 import com.mrcrayfish.improvedwolves.Reference;
+import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
+import com.mrcrayfish.improvedwolves.init.ModMemoryModuleTypes;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.concurrent.TickDelayedTask;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -15,10 +21,12 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Author: MrCrayfish
@@ -46,6 +54,30 @@ public class WolfHeldItemDataHandler
         if(event.getObject() instanceof WolfEntity)
         {
             event.addCapability(new ResourceLocation(Reference.MOD_ID, "wolf_held_item"), new Provider());
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityJoin(EntityJoinWorldEvent event)
+    {
+        if(event.getEntity() instanceof WolfEntity)
+        {
+            WolfEntity wolf = (WolfEntity) event.getEntity();
+            WolfHeldItemDataHandler.IWolfHeldItem handler = WolfHeldItemDataHandler.getHandler(wolf);
+            if(handler != null)
+            {
+                ItemStack stack = handler.getItemStack();
+                if(!stack.isEmpty())
+                {
+                    MinecraftServer server = event.getWorld().getServer();
+                    if(server != null)
+                    {
+                        wolf.getBrain().setMemory(ModMemoryModuleTypes.CHEST, Optional.empty());
+                        handler.setItemStack(ItemStack.EMPTY);
+                        server.enqueue(new TickDelayedTask(1, () -> event.getWorld().addEntity(new ItemEntity(event.getWorld(), wolf.getPosX(), wolf.getPosY(), wolf.getPosZ(), stack.copy()))));
+                    }
+                }
+            }
         }
     }
 

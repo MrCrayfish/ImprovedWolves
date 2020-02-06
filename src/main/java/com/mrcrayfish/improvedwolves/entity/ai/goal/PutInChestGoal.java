@@ -64,14 +64,6 @@ public class PutInChestGoal extends Goal
         ItemStack heldItem = owner.getHeldItemMainhand();
         if(heldItem.isEmpty())
         {
-            WolfHeldItemDataHandler.IWolfHeldItem handler = WolfHeldItemDataHandler.getHandler(this.entity);
-            if(handler != null)
-            {
-                heldItem = handler.getItemStack();
-            }
-        }
-        if(heldItem.isEmpty())
-        {
             return false;
         }
         TileEntity tileEntity = this.getStorage(globalPos.getPos());
