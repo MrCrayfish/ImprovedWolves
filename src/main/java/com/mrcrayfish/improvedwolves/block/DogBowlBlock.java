@@ -8,13 +8,14 @@ import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -87,6 +88,21 @@ public class DogBowlBlock extends HorizontalBlock implements IWaterLoggable
                 ((DogBowlTileEntity) tileentity).setCustomName(stack.getDisplayName());
                 TileEntityUtil.sendUpdatePacket(tileentity);
             }
+        }
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+    {
+        if(state.getBlock() != newState.getBlock())
+        {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if(tileentity instanceof IInventory)
+            {
+                InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileentity);
+                worldIn.updateComparatorOutputLevel(pos, this);
+            }
+            super.onReplaced(state, worldIn, pos, newState, isMoving);
         }
     }
 
