@@ -4,6 +4,7 @@ import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
 import com.mrcrayfish.improvedwolves.common.entity.WolfHeldItemDataHandler;
 import com.mrcrayfish.improvedwolves.init.ModMemoryModuleTypes;
 import com.mrcrayfish.improvedwolves.util.InventoryUtil;
+import com.mrcrayfish.improvedwolves.util.TileEntityUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
@@ -193,6 +194,10 @@ public class PutInChestGoal extends Goal
                                 this.entity.getDataManager().set(CustomDataParameters.WOLF_HELD_ITEM, copy);
                                 this.entity.getBrain().removeMemory(ModMemoryModuleTypes.CHEST);
                                 this.entity.world.playSound(null, this.entity.getPosX(), this.entity.getPosY() + this.entity.getEyeHeight(), this.entity.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 0.5F);
+                                if(this.inventory instanceof TileEntity)
+                                {
+                                    TileEntityUtil.sendUpdatePacket((TileEntity) this.inventory);
+                                }
                                 return;
                             }
                         }
