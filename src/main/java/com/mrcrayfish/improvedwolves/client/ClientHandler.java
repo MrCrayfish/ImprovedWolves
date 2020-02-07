@@ -70,7 +70,7 @@ public class ClientHandler
                     BlockPos pos = blockRayTraceResult.getPos();
                     if(result.getType() == RayTraceResult.Type.MISS || pos.withinDistance(Minecraft.getInstance().player.getEyePosition(0F), 20.0D))
                     {
-                        PacketHandler.instance.sendToServer(new MessageWolfDepositItem(pos));
+                        PacketHandler.instance.sendToServer(new MessageWolfDepositItem(pos, result.getType() == RayTraceResult.Type.MISS));
                     }
                 }
             }

@@ -34,24 +34,27 @@ import java.util.function.Supplier;
 public class MessageWolfDepositItem implements IMessage<MessageWolfDepositItem>
 {
     private BlockPos pos;
+    private boolean miss;
 
     public MessageWolfDepositItem() {}
 
-    public MessageWolfDepositItem(BlockPos pos)
+    public MessageWolfDepositItem(BlockPos pos, boolean miss)
     {
         this.pos = pos;
+        this.miss = miss;
     }
 
     @Override
     public void encode(MessageWolfDepositItem message, PacketBuffer buffer)
     {
         buffer.writeBlockPos(message.pos);
+        buffer.writeBoolean(message.miss);
     }
 
     @Override
     public MessageWolfDepositItem decode(PacketBuffer buffer)
     {
-        return new MessageWolfDepositItem(buffer.readBlockPos());
+        return new MessageWolfDepositItem(buffer.readBlockPos(), buffer.readBoolean());
     }
 
     @Override
@@ -62,7 +65,7 @@ public class MessageWolfDepositItem implements IMessage<MessageWolfDepositItem>
             ServerPlayerEntity player = supplier.get().getSender();
             if(player != null)
             {
-                if(!message.pos.withinDistance(player.getEyePosition(0F), 20.0D))
+                if(!message.miss && !message.pos.withinDistance(player.getEyePosition(0F), 20.0D))
                 {
                     return;
                 }
@@ -102,7 +105,8 @@ public class MessageWolfDepositItem implements IMessage<MessageWolfDepositItem>
                     Brain<?> brain = commandingWolf.getBrain();
                     if(brain.getMemory(ModMemoryModuleTypes.CHEST).isPresent())
                     {
-                        if(world.getTileEntity(message.pos) instanceof IInventory && !brain.getMemory(ModMemoryModuleTypes.CHEST).get().getPos().equals(message.pos))
+                        TileEntity tileEntity = world.getTileEntity(message.pos);
+                        if(!message.miss && tileEntity instanceof IInventory && !brain.getMemory(ModMemoryModuleTypes.CHEST).get().getPos().equals(message.pos))
                         {
                             brain.setMemory(ModMemoryModuleTypes.CHEST, GlobalPos.of(player.dimension, message.pos));
                             world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.ENTITY_PLAYER_WHISTLE, SoundCategory.PLAYERS, 1.0F, 1.0F);
