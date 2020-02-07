@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#D#",
+        " # "
+    ],
+    "key": {
+        "D": {
+            "item": "minecraft:yellow_dye"
+        },
+        "#": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "result": {
+        "item": "improvedwolves:yellow_dog_bowl"
+    }
+}

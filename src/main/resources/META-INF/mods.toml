@@ -1,13 +1,13 @@
 modLoader="javafml"
 loaderVersion="[31,)"
 
-issueTrackerURL="https://github.com/MrCrayfish/ImprovedWolves/issues"
+issueTrackerURL="https://mrcrayfish.com/mods?id=improvedwolves"
 
 [[mods]]
 modId="improvedwolves"
 version="1.0.0"
 displayName="Improved Wolves"
-updateJSONURL=""
+updateJSONURL="https://mrcrayfish.com/mods?id=improvedwolves"
 displayURL="https://mrcrayfish.com/mods?id=improvedwolves"
 logoFile="examplemod.png"
 credits="@Rexxgamesss and @Jor02video on Twitter for ideas"
@@ -23,6 +23,6 @@ description='Makes wolves smarter!'
 [[dependencies.improvedwolves]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.15.2,1.16)"
     ordering="NONE"
     side="BOTH"
