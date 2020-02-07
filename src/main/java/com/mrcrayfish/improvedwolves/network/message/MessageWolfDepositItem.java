@@ -1,6 +1,7 @@
 package com.mrcrayfish.improvedwolves.network.message;
 
 import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
+import com.mrcrayfish.improvedwolves.entity.ai.goal.PutInChestGoal;
 import com.mrcrayfish.improvedwolves.init.ModMemoryModuleTypes;
 import com.mrcrayfish.improvedwolves.init.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -11,13 +12,17 @@ import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.ChatType;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -108,8 +113,20 @@ public class MessageWolfDepositItem implements IMessage<MessageWolfDepositItem>
                         TileEntity tileEntity = world.getTileEntity(message.pos);
                         if(!message.miss && tileEntity instanceof IInventory && !brain.getMemory(ModMemoryModuleTypes.CHEST).get().getPos().equals(message.pos))
                         {
-                            brain.setMemory(ModMemoryModuleTypes.CHEST, GlobalPos.of(player.dimension, message.pos));
-                            world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.ENTITY_PLAYER_WHISTLE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            ItemStack heldItem = player.getHeldItemMainhand();
+                            if(heldItem.isEmpty())
+                            {
+                                return;
+                            }
+                            if(PutInChestGoal.canInsertItemIntoStorage((IInventory) tileEntity, heldItem))
+                            {
+                                brain.setMemory(ModMemoryModuleTypes.CHEST, GlobalPos.of(player.dimension, message.pos));
+                                world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.ENTITY_PLAYER_WHISTLE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            }
+                            else
+                            {
+                                player.sendMessage(new TranslationTextComponent("info.improvedwolves.storage_full", tileEntity.getBlockState().getBlock().getNameTextComponent()), ChatType.GAME_INFO);
+                            }
                         }
                         else
                         {
@@ -117,11 +134,27 @@ public class MessageWolfDepositItem implements IMessage<MessageWolfDepositItem>
                             world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.ENTITY_PLAYER_WHISTLE, SoundCategory.PLAYERS, 1.0F, 0.5F);
                         }
                     }
-                    else if(world.getTileEntity(message.pos) instanceof IInventory)
+                    else
                     {
-                        brain.setMemory(ModMemoryModuleTypes.CHEST, GlobalPos.of(player.dimension, message.pos));
-                        commandingWolf.goalSelector.getRunningGoals().forEach(PrioritizedGoal::resetTask);
-                        world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.ENTITY_PLAYER_WHISTLE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                        TileEntity tileEntity = world.getTileEntity(message.pos);
+                        if(tileEntity instanceof IInventory)
+                        {
+                            ItemStack heldItem = player.getHeldItemMainhand();
+                            if(heldItem.isEmpty())
+                            {
+                                return;
+                            }
+                            if(PutInChestGoal.canInsertItemIntoStorage((IInventory) tileEntity, heldItem))
+                            {
+                                brain.setMemory(ModMemoryModuleTypes.CHEST, GlobalPos.of(player.dimension, message.pos));
+                                commandingWolf.goalSelector.getRunningGoals().forEach(PrioritizedGoal::resetTask);
+                                world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.ENTITY_PLAYER_WHISTLE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            }
+                            else
+                            {
+                                player.sendMessage(new TranslationTextComponent("info.improvedwolves.storage_full", tileEntity.getBlockState().getBlock().getNameTextComponent()), ChatType.GAME_INFO);
+                            }
+                        }
                     }
                 }
             }
