@@ -19,5 +19,7 @@
     "block.improvedwolves.black_dog_bowl": "Black Dog Bowl",
     "container.improvedwolves.dog_bowl": "Dog Bowl",
     "subtitle.improvedwolves.entity.player.whistle": "Whistle",
-    "info.improvedwolves.storage_full": "%s is full!"
+    "info.improvedwolves.storage_full": "%s is full!",
+    "key.categories.improvedwolves": "Improved Wolves",
+    "key.improvedwolves.deposit": "Wolf Command Deposit"
 }

@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.model.WolfModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.BlockItem;
@@ -40,6 +41,8 @@ import org.lwjgl.glfw.GLFW;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class ClientHandler
 {
+    public static final KeyBinding KEY_COMMAND_DEPOSIT = new KeyBinding("key.improvedwolves.deposit", GLFW.GLFW_KEY_U, "key.categories.improvedwolves");
+
     public static void setup()
     {
         Minecraft.getInstance().getItemColors().register((stack, index) -> {
@@ -54,12 +57,13 @@ public class ClientHandler
 
         ScreenManager.registerFactory(ModContainers.DOG_BOWL, DogBowlScreen::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.DOG_BOWL, DogBowlRenderer::new);
+        ClientRegistry.registerKeyBinding(KEY_COMMAND_DEPOSIT);
     }
 
     @SubscribeEvent
     public static void onKeyPress(InputEvent.KeyInputEvent event)
     {
-        if(event.getAction() == GLFW.GLFW_PRESS && event.getKey() == GLFW.GLFW_KEY_U)
+        if(event.getAction() == GLFW.GLFW_PRESS && event.getKey() == KEY_COMMAND_DEPOSIT.getKey().getKeyCode())
         {
             if(Minecraft.getInstance().player != null)
             {
