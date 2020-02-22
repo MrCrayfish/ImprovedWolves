@@ -3,8 +3,11 @@ package com.mrcrayfish.improvedwolves.client;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mrcrayfish.improvedwolves.Reference;
 import com.mrcrayfish.improvedwolves.block.DogBowlBlock;
+import com.mrcrayfish.improvedwolves.block.CatBowlBlock;
 import com.mrcrayfish.improvedwolves.client.render.tileentity.DogBowlRenderer;
+import com.mrcrayfish.improvedwolves.client.render.tileentity.CatBowlRenderer;
 import com.mrcrayfish.improvedwolves.client.screen.DogBowlScreen;
+import com.mrcrayfish.improvedwolves.client.screen.CatBowlScreen;
 import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
 import com.mrcrayfish.improvedwolves.init.ModBlocks;
 import com.mrcrayfish.improvedwolves.init.ModContainers;
@@ -20,6 +23,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -49,14 +53,25 @@ public class ClientHandler
             Block block = Block.getBlockFromItem(stack.getItem());
             return block instanceof DogBowlBlock ? ((DogBowlBlock) block).getColor().getColorValue() : 0xFFFFFF;
         }, ModBlocks.WHITE_DOG_BOWL, ModBlocks.ORANGE_DOG_BOWL, ModBlocks.MAGENTA_DOG_BOWL, ModBlocks.LIGHT_BLUE_DOG_BOWL, ModBlocks.YELLOW_DOG_BOWL, ModBlocks.LIME_DOG_BOWL, ModBlocks.PINK_DOG_BOWL, ModBlocks.GRAY_DOG_BOWL, ModBlocks.LIGHT_GRAY_DOG_BOWL, ModBlocks.CYAN_DOG_BOWL, ModBlocks.PURPLE_DOG_BOWL, ModBlocks.BLUE_DOG_BOWL, ModBlocks.BROWN_DOG_BOWL, ModBlocks.GREEN_DOG_BOWL, ModBlocks.RED_DOG_BOWL, ModBlocks.BLACK_DOG_BOWL);
+        Minecraft.getInstance().getItemColors().register((stack, index) -> {
+            Block block = Block.getBlockFromItem(stack.getItem());
+            return block instanceof CatBowlBlock ? ((CatBowlBlock) block).getColor().getColorValue() : 0xFFFFFF;
+        }, ModBlocks.WHITE_Cat_BOWL, ModBlocks.ORANGE_Cat_BOWL, ModBlocks.MAGENTA_Cat_BOWL, ModBlocks.LIGHT_BLUE_Cat_BOWL, ModBlocks.YELLOW_Cat_BOWL, ModBlocks.LIME_Cat_BOWL, ModBlocks.PINK_Cat_BOWL, ModBlocks.GRAY_Cat_BOWL, ModBlocks.LIGHT_GRAY_Cat_BOWL, ModBlocks.CYAN_Cat_BOWL, ModBlocks.PURPLE_Cat_BOWL, ModBlocks.BLUE_Cat_BOWL, ModBlocks.BROWN_Cat_BOWL, ModBlocks.GREEN_Cat_BOWL, ModBlocks.RED_Cat_BOWL, ModBlocks.BLACK_Cat_BOWL);
 
         Minecraft.getInstance().getBlockColors().register((state, reader, pos, index) -> {
             Block block = state.getBlock();
             return block instanceof DogBowlBlock ? ((DogBowlBlock) block).getColor().getColorValue() : 0xFFFFFF;
         }, ModBlocks.WHITE_DOG_BOWL, ModBlocks.ORANGE_DOG_BOWL, ModBlocks.MAGENTA_DOG_BOWL, ModBlocks.LIGHT_BLUE_DOG_BOWL, ModBlocks.YELLOW_DOG_BOWL, ModBlocks.LIME_DOG_BOWL, ModBlocks.PINK_DOG_BOWL, ModBlocks.GRAY_DOG_BOWL, ModBlocks.LIGHT_GRAY_DOG_BOWL, ModBlocks.CYAN_DOG_BOWL, ModBlocks.PURPLE_DOG_BOWL, ModBlocks.BLUE_DOG_BOWL, ModBlocks.BROWN_DOG_BOWL, ModBlocks.GREEN_DOG_BOWL, ModBlocks.RED_DOG_BOWL, ModBlocks.BLACK_DOG_BOWL);
+        
+        Minecraft.getInstance().getBlockColors().register((state, reader, pos, index) -> {
+            Block block = state.getBlock();
+            return block instanceof CatBowlBlock ? ((CatBowlBlock) block).getColor().getColorValue() : 0xFFFFFF;
+        }, ModBlocks.WHITE_Cat_BOWL, ModBlocks.ORANGE_Cat_BOWL, ModBlocks.MAGENTA_Cat_BOWL, ModBlocks.LIGHT_BLUE_Cat_BOWL, ModBlocks.YELLOW_Cat_BOWL, ModBlocks.LIME_Cat_BOWL, ModBlocks.PINK_Cat_BOWL, ModBlocks.GRAY_Cat_BOWL, ModBlocks.LIGHT_GRAY_Cat_BOWL, ModBlocks.CYAN_Cat_BOWL, ModBlocks.PURPLE_Cat_BOWL, ModBlocks.BLUE_Cat_BOWL, ModBlocks.BROWN_Cat_BOWL, ModBlocks.GREEN_Cat_BOWL, ModBlocks.RED_Cat_BOWL, ModBlocks.BLACK_Cat_BOWL);
 
         ScreenManager.registerFactory(ModContainers.DOG_BOWL, DogBowlScreen::new);
+        ScreenManager.registerFactory(ModContainers.Cat_BOWL, CatBowlScreen::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.DOG_BOWL, DogBowlRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntities.Cat_BOWL, CatBowlRenderer::new);
         ClientRegistry.registerKeyBinding(KEY_COMMAND_DEPOSIT);
     }
 
@@ -115,4 +130,5 @@ public class ClientHandler
             }
         }
     }
+
 }

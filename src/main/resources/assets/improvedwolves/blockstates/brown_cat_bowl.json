@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "facing=north": {
+            "model": "improvedwolves:block/brown_cat_bowl",
+            "y": 0
+        },
+        "facing=east": {
+            "model": "improvedwolves:block/brown_cat_bowl",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "improvedwolves:block/brown_cat_bowl",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "improvedwolves:block/brown_cat_bowl",
+            "y": 270
+        }
+    }
+}

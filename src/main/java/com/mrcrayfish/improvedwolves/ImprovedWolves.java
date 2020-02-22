@@ -3,12 +3,16 @@ package com.mrcrayfish.improvedwolves;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.Dynamic;
 import com.mrcrayfish.improvedwolves.block.DogBowlBlock;
+import com.mrcrayfish.improvedwolves.block.CatBowlBlock;
 import com.mrcrayfish.improvedwolves.client.ClientHandler;
 import com.mrcrayfish.improvedwolves.client.render.tileentity.DogBowlRenderer;
+import com.mrcrayfish.improvedwolves.client.render.tileentity.CatBowlRenderer;
 import com.mrcrayfish.improvedwolves.client.screen.DogBowlScreen;
+import com.mrcrayfish.improvedwolves.client.screen.CatBowlScreen;
 import com.mrcrayfish.improvedwolves.common.CommonEvents;
 import com.mrcrayfish.improvedwolves.common.entity.WolfHeldItemDataHandler;
 import com.mrcrayfish.improvedwolves.entity.ai.goal.MoveToDogBowlGoal;
+import com.mrcrayfish.improvedwolves.entity.ai.goal.MoveToCatBowlGoal;
 import com.mrcrayfish.improvedwolves.entity.ai.goal.PutInChestGoal;
 import com.mrcrayfish.improvedwolves.init.ModBlocks;
 import com.mrcrayfish.improvedwolves.init.ModContainers;
@@ -16,6 +20,7 @@ import com.mrcrayfish.improvedwolves.init.ModMemoryModuleTypes;
 import com.mrcrayfish.improvedwolves.init.ModTileEntities;
 import com.mrcrayfish.improvedwolves.network.PacketHandler;
 import com.mrcrayfish.improvedwolves.tileentity.DogBowlTileEntity;
+import com.mrcrayfish.improvedwolves.tileentity.CatBowlTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -23,6 +28,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -78,6 +84,11 @@ public class ImprovedWolves
             WolfEntity wolfEntity = (WolfEntity) entity;
             wolfEntity.goalSelector.addGoal(5, new MoveToDogBowlGoal(wolfEntity));
             wolfEntity.goalSelector.addGoal(5, new PutInChestGoal(wolfEntity));
+        }
+        if(entity instanceof CatEntity)
+        {
+            CatEntity catEntity = (CatEntity) entity;
+            catEntity.goalSelector.addGoal(5, new MoveToCatBowlGoal(catEntity));
         }
     }
 
