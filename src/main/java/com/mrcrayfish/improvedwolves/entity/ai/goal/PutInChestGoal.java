@@ -3,6 +3,8 @@ package com.mrcrayfish.improvedwolves.entity.ai.goal;
 import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
 import com.mrcrayfish.improvedwolves.common.entity.WolfHeldItemDataHandler;
 import com.mrcrayfish.improvedwolves.init.ModMemoryModuleTypes;
+import com.mrcrayfish.improvedwolves.network.PacketHandler;
+import com.mrcrayfish.improvedwolves.network.message.MessageSyncHeldWolfItem;
 import com.mrcrayfish.improvedwolves.util.InventoryUtil;
 import com.mrcrayfish.improvedwolves.util.TileEntityUtil;
 import net.minecraft.block.BlockState;
@@ -23,6 +25,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -134,7 +137,7 @@ public class PutInChestGoal extends Goal
                         ItemStack copy = heldItem.copy();
                         copy.setCount(Math.min(maxCount, copy.getCount()));
                         handler.setItemStack(copy);
-                        this.entity.getDataManager().set(CustomDataParameters.WOLF_HELD_ITEM, copy);
+                        PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new MessageSyncHeldWolfItem(this.entity.getEntityId(), handler.getItemStack()));
                         heldItem.shrink(copy.getCount());
                         this.state = State.PUT_ITEM_IN_CHEST;
                         this.entity.world.playSound(null, this.entity.getPosX(), this.entity.getPosY() + this.entity.getEyeHeight(), this.entity.getPosZ(), SoundEvents.ENTITY_FOX_BITE, SoundCategory.NEUTRAL, 1.0F, 0.5F);
@@ -191,7 +194,7 @@ public class PutInChestGoal extends Goal
                                     this.state = State.MOVE_TO_PLAYER;
                                 }
                                 handler.setItemStack(copy);
-                                this.entity.getDataManager().set(CustomDataParameters.WOLF_HELD_ITEM, copy);
+                                PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new MessageSyncHeldWolfItem(this.entity.getEntityId(), handler.getItemStack()));
                                 this.entity.getBrain().removeMemory(ModMemoryModuleTypes.CHEST);
                                 this.entity.world.playSound(null, this.entity.getPosX(), this.entity.getPosY() + this.entity.getEyeHeight(), this.entity.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 0.5F);
                                 if(this.inventory instanceof TileEntity)
@@ -220,7 +223,7 @@ public class PutInChestGoal extends Goal
                         if(!this.owner.isAlive())
                         {
                             this.state = State.FINISHED;
-                            this.entity.getDataManager().set(CustomDataParameters.WOLF_HELD_ITEM, ItemStack.EMPTY);
+                            PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new MessageSyncHeldWolfItem(this.entity.getEntityId(), handler2.getItemStack()));
                             handler2.setItemStack(ItemStack.EMPTY);
                             this.entity.getEntityWorld().addEntity(new ItemEntity(this.entity.world, this.entity.getPosX(), this.entity.getPosY(), this.entity.getPosZ(), stack.copy()));
                             return;
@@ -253,7 +256,7 @@ public class PutInChestGoal extends Goal
                             {
                                 PlayerInventory playerInventory = ((PlayerEntity) this.owner).inventory;
                                 playerInventory.placeItemBackInInventory(this.owner.world, stack);
-                                this.entity.getDataManager().set(CustomDataParameters.WOLF_HELD_ITEM, ItemStack.EMPTY);
+                                PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new MessageSyncHeldWolfItem(this.entity.getEntityId(), handler2.getItemStack()));
                                 handler2.setItemStack(ItemStack.EMPTY);
                                 this.owner.getDataManager().set(CustomDataParameters.COMMANDING_WOLF, Optional.empty());
                                 this.state = State.FINISHED;

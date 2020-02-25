@@ -2,6 +2,7 @@ package com.mrcrayfish.improvedwolves.network;
 
 import com.mrcrayfish.improvedwolves.Reference;
 import com.mrcrayfish.improvedwolves.network.message.IMessage;
+import com.mrcrayfish.improvedwolves.network.message.MessageSyncHeldWolfItem;
 import com.mrcrayfish.improvedwolves.network.message.MessageWolfDepositItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -24,6 +25,7 @@ public class PacketHandler
                 .simpleChannel();
 
         register(MessageWolfDepositItem.class, new MessageWolfDepositItem());
+        register(MessageSyncHeldWolfItem.class, new MessageSyncHeldWolfItem());
     }
 
     private static <T> void register(Class<T> clazz, IMessage<T> message)

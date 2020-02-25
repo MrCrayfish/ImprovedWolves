@@ -6,6 +6,7 @@ import com.mrcrayfish.improvedwolves.block.DogBowlBlock;
 import com.mrcrayfish.improvedwolves.client.render.tileentity.DogBowlRenderer;
 import com.mrcrayfish.improvedwolves.client.screen.DogBowlScreen;
 import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
+import com.mrcrayfish.improvedwolves.common.entity.WolfHeldItemDataHandler;
 import com.mrcrayfish.improvedwolves.init.ModBlocks;
 import com.mrcrayfish.improvedwolves.init.ModContainers;
 import com.mrcrayfish.improvedwolves.init.ModTileEntities;
@@ -19,7 +20,9 @@ import net.minecraft.client.renderer.entity.model.WolfModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -30,6 +33,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -87,31 +91,53 @@ public class ClientHandler
         if(event.getEntity() instanceof WolfEntity)
         {
             WolfEntity wolf = (WolfEntity) event.getEntity();
-            ItemStack heldItem = wolf.getDataManager().get(CustomDataParameters.WOLF_HELD_ITEM);
-            if(!heldItem.isEmpty())
+            WolfHeldItemDataHandler.IWolfHeldItem handler = WolfHeldItemDataHandler.getHandler(wolf);
+            if(handler != null)
             {
-                MatrixStack matrix = event.getMatrixStack();
-                matrix.push();
-                matrix.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
-                matrix.translate(-1 * 0.0625, 0, 7 * 0.0625);
-                matrix.rotate(Vector3f.YN.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
-                matrix.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), -wolf.prevRotationYawHead, -wolf.rotationYawHead)));
-                matrix.rotate(Vector3f.XP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), wolf.prevRotationPitch, wolf.rotationPitch)));
-                matrix.translate(1 * 0.0625, 8.5 * 0.0625, 5 * 0.0625);
-                if(heldItem.getItem() instanceof BlockItem)
+                ItemStack heldItem = handler.getItemStack();
+                if(!heldItem.isEmpty())
                 {
-                    matrix.translate(0, -1.0 * 0.0625, 0);
-                    matrix.rotate(Vector3f.XP.rotationDegrees(75F));
-                    matrix.scale(0.2F, 0.2F, 0.2F);
+                    MatrixStack matrix = event.getMatrixStack();
+                    matrix.push();
+                    matrix.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
+                    matrix.translate(-1 * 0.0625, 0, 7 * 0.0625);
+                    matrix.rotate(Vector3f.YN.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), -wolf.prevRenderYawOffset, -wolf.renderYawOffset)));
+                    matrix.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), -wolf.prevRotationYawHead, -wolf.rotationYawHead)));
+                    matrix.rotate(Vector3f.XP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), wolf.prevRotationPitch, wolf.rotationPitch)));
+                    matrix.translate(1 * 0.0625, 8.5 * 0.0625, 5 * 0.0625);
+                    if(heldItem.getItem() instanceof BlockItem)
+                    {
+                        matrix.translate(0, -1.0 * 0.0625, 0);
+                        matrix.rotate(Vector3f.XP.rotationDegrees(75F));
+                        matrix.scale(0.2F, 0.2F, 0.2F);
+                    }
+                    else
+                    {
+                        matrix.scale(0.4F, 0.4F, 0.4F);
+                    }
+                    matrix.rotate(Vector3f.YP.rotationDegrees(90F));
+                    matrix.rotate(Vector3f.XP.rotationDegrees(90F));
+                    Minecraft.getInstance().getItemRenderer().renderItem(heldItem, ItemCameraTransforms.TransformType.NONE, event.getLight(), OverlayTexture.DEFAULT_LIGHT, matrix, event.getBuffers());
+                    matrix.pop();
                 }
-                else
+            }
+        }
+    }
+
+    public static void setWolfHeldItem(int entityId, ItemStack stack)
+    {
+        World world = Minecraft.getInstance().world;
+        if(world != null)
+        {
+            Entity entity = world.getEntityByID(entityId);
+            if(entity instanceof WolfEntity)
+            {
+                WolfEntity wolf = (WolfEntity) entity;
+                WolfHeldItemDataHandler.IWolfHeldItem heldItem = WolfHeldItemDataHandler.getHandler(wolf);
+                if(heldItem != null)
                 {
-                    matrix.scale(0.4F, 0.4F, 0.4F);
+                    heldItem.setItemStack(stack);
                 }
-                matrix.rotate(Vector3f.YP.rotationDegrees(90F));
-                matrix.rotate(Vector3f.XP.rotationDegrees(90F));
-                Minecraft.getInstance().getItemRenderer().renderItem(heldItem, ItemCameraTransforms.TransformType.NONE, event.getLight(), OverlayTexture.DEFAULT_LIGHT, matrix, event.getBuffers());
-                matrix.pop();
             }
         }
     }

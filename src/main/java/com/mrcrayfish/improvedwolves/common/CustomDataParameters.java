@@ -15,6 +15,5 @@ import java.util.UUID;
  */
 public class CustomDataParameters
 {
-    public static final DataParameter<ItemStack> WOLF_HELD_ITEM = EntityDataManager.createKey(WolfEntity.class, DataSerializers.ITEMSTACK);
     public static final DataParameter<Optional<UUID>> COMMANDING_WOLF = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 }
