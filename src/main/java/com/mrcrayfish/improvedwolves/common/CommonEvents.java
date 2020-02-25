@@ -20,15 +20,6 @@ import java.util.Optional;
 public class CommonEvents
 {
     @SubscribeEvent
-    public void onEntityConstruct(EntityEvent.EntityConstructing event)
-    {
-        if(event.getEntity() instanceof PlayerEntity)
-        {
-            event.getEntity().getDataManager().register(CustomDataParameters.COMMANDING_WOLF, Optional.empty());
-        }
-    }
-
-    @SubscribeEvent
     public void onStartTracking(PlayerEvent.StartTracking event)
     {
         if(event.getTarget() instanceof WolfEntity)

@@ -1,7 +1,6 @@
 package com.mrcrayfish.improvedwolves.common.entity;
 
 import com.mrcrayfish.improvedwolves.Reference;
-import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
 import com.mrcrayfish.improvedwolves.init.ModMemoryModuleTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
@@ -13,7 +12,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.concurrent.TickDelayedTask;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;

@@ -1,6 +1,6 @@
 package com.mrcrayfish.improvedwolves.entity.ai.goal;
 
-import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
+import com.mrcrayfish.improvedwolves.common.entity.PlayerDataHandler;
 import com.mrcrayfish.improvedwolves.common.entity.WolfHeldItemDataHandler;
 import com.mrcrayfish.improvedwolves.init.ModMemoryModuleTypes;
 import com.mrcrayfish.improvedwolves.network.PacketHandler;
@@ -258,7 +258,14 @@ public class PutInChestGoal extends Goal
                                 playerInventory.placeItemBackInInventory(this.owner.world, stack);
                                 PacketHandler.instance.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new MessageSyncHeldWolfItem(this.entity.getEntityId(), handler2.getItemStack()));
                                 handler2.setItemStack(ItemStack.EMPTY);
-                                this.owner.getDataManager().set(CustomDataParameters.COMMANDING_WOLF, Optional.empty());
+                                if(this.owner instanceof PlayerEntity)
+                                {
+                                    PlayerDataHandler.IPlayerData playerDataHandler = PlayerDataHandler.getHandler((PlayerEntity) this.owner);
+                                    if(playerDataHandler != null)
+                                    {
+                                        playerDataHandler.setCommandingWolf(null);
+                                    }
+                                }
                                 this.state = State.FINISHED;
                                 this.entity.world.playSound(null, this.entity.getPosX(), this.entity.getPosY() + this.entity.getEyeHeight(), this.entity.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                                 return;
@@ -323,7 +330,14 @@ public class PutInChestGoal extends Goal
     public void resetTask()
     {
         this.state = State.FINISHED;
-        this.owner.getDataManager().set(CustomDataParameters.COMMANDING_WOLF, Optional.empty());
+        if(this.owner instanceof PlayerEntity)
+        {
+            PlayerDataHandler.IPlayerData playerDataHandler = PlayerDataHandler.getHandler((PlayerEntity) this.owner);
+            if(playerDataHandler != null)
+            {
+                playerDataHandler.setCommandingWolf(null);
+            }
+        }
         this.owner = null;
         this.inventory = null;
         this.globalPos = null;
