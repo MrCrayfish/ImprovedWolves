@@ -1,11 +1,9 @@
 package com.mrcrayfish.improvedwolves.network.message;
 
-import com.mrcrayfish.improvedwolves.common.CustomDataParameters;
+import com.mrcrayfish.improvedwolves.common.entity.PlayerDataHandler;
 import com.mrcrayfish.improvedwolves.entity.ai.goal.PutInChestGoal;
 import com.mrcrayfish.improvedwolves.init.ModMemoryModuleTypes;
 import com.mrcrayfish.improvedwolves.init.ModSounds;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
@@ -16,14 +14,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -77,7 +71,12 @@ public class MessageWolfDepositItem implements IMessage<MessageWolfDepositItem>
 
                 ServerWorld world = player.getServerWorld();
                 WolfEntity commandingWolf = null;
-                Optional<UUID> optional = player.getDataManager().get(CustomDataParameters.COMMANDING_WOLF);
+                PlayerDataHandler.IPlayerData playerDataHandler = PlayerDataHandler.getHandler(player);
+                if(playerDataHandler == null)
+                {
+                    return;
+                }
+                Optional<UUID> optional = playerDataHandler.getCommandingWolf();
                 if(optional.isPresent())
                 {
                     UUID uuid = optional.get();
@@ -88,7 +87,7 @@ public class MessageWolfDepositItem implements IMessage<MessageWolfDepositItem>
                     }
                     else
                     {
-                        player.getDataManager().set(CustomDataParameters.COMMANDING_WOLF, Optional.empty());
+                        playerDataHandler.setCommandingWolf(null);
                     }
                 }
                 if(commandingWolf == null)
@@ -106,7 +105,7 @@ public class MessageWolfDepositItem implements IMessage<MessageWolfDepositItem>
                     {
                         return;
                     }
-                    player.getDataManager().set(CustomDataParameters.COMMANDING_WOLF, Optional.of(commandingWolf.getUniqueID()));
+                    playerDataHandler.setCommandingWolf(commandingWolf.getUniqueID());
                     Brain<?> brain = commandingWolf.getBrain();
                     if(brain.getMemory(ModMemoryModuleTypes.CHEST).isPresent())
                     {
