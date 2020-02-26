@@ -10,6 +10,7 @@ import com.mrcrayfish.improvedwolves.client.render.tileentity.CatBowlRenderer;
 import com.mrcrayfish.improvedwolves.client.screen.DogBowlScreen;
 import com.mrcrayfish.improvedwolves.client.screen.CatBowlScreen;
 import com.mrcrayfish.improvedwolves.common.CommonEvents;
+import com.mrcrayfish.improvedwolves.common.entity.PlayerDataHandler;
 import com.mrcrayfish.improvedwolves.common.entity.WolfHeldItemDataHandler;
 import com.mrcrayfish.improvedwolves.entity.ai.goal.MoveToDogBowlGoal;
 import com.mrcrayfish.improvedwolves.entity.ai.goal.MoveToCatBowlGoal;
@@ -67,6 +68,7 @@ public class ImprovedWolves
     {
         MinecraftForge.EVENT_BUS.register(new CommonEvents());
         WolfHeldItemDataHandler.register();
+        PlayerDataHandler.register();
         PacketHandler.register();
     }
 
