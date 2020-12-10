@@ -2,6 +2,7 @@ package com.mrcrayfish.improvedwolves.init;
 
 import com.mrcrayfish.improvedwolves.Reference;
 import com.mrcrayfish.improvedwolves.inventory.container.DogBowlContainer;
+import com.mrcrayfish.improvedwolves.inventory.container.CatBowlContainer;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.event.RegistryEvent;
@@ -20,6 +21,7 @@ public class ModContainers
     private static final List<ContainerType<?>> CONTAINER_TYPES = new ArrayList<>();
 
     public static final ContainerType<DogBowlContainer> DOG_BOWL = register(Reference.MOD_ID + ":dog_bowl", DogBowlContainer::new);
+    public static final ContainerType<CatBowlContainer> Cat_BOWL = register(Reference.MOD_ID + ":cat_bowl", CatBowlContainer::new);
 
     private static <T extends Container> ContainerType<T> register(String key, ContainerType.IFactory<T> factory)
     {

@@ -3,6 +3,7 @@ package com.mrcrayfish.improvedwolves.init;
 import com.mrcrayfish.improvedwolves.ImprovedWolves;
 import com.mrcrayfish.improvedwolves.Reference;
 import com.mrcrayfish.improvedwolves.block.DogBowlBlock;
+import com.mrcrayfish.improvedwolves.block.CatBowlBlock;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -44,6 +45,23 @@ public class ModBlocks
     public static final Block GREEN_DOG_BOWL = register(new DogBowlBlock(DyeColor.GREEN, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "green_dog_bowl"));
     public static final Block RED_DOG_BOWL = register(new DogBowlBlock(DyeColor.RED, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "red_dog_bowl"));
     public static final Block BLACK_DOG_BOWL = register(new DogBowlBlock(DyeColor.BLACK, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "black_dog_bowl"));
+        //Cats
+    public static final Block WHITE_Cat_BOWL = register(new CatBowlBlock(DyeColor.WHITE, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "white_cat_bowl"));
+    public static final Block ORANGE_Cat_BOWL = register(new CatBowlBlock(DyeColor.ORANGE, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "orange_cat_bowl"));
+    public static final Block MAGENTA_Cat_BOWL = register(new CatBowlBlock(DyeColor.MAGENTA, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "magenta_cat_bowl"));
+    public static final Block LIGHT_BLUE_Cat_BOWL = register(new CatBowlBlock(DyeColor.LIGHT_BLUE, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "light_blue_cat_bowl"));
+    public static final Block YELLOW_Cat_BOWL = register(new CatBowlBlock(DyeColor.YELLOW, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "yellow_cat_bowl"));
+    public static final Block LIME_Cat_BOWL = register(new CatBowlBlock(DyeColor.LIME, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "lime_cat_bowl"));
+    public static final Block PINK_Cat_BOWL = register(new CatBowlBlock(DyeColor.PINK, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "pink_cat_bowl"));
+    public static final Block GRAY_Cat_BOWL = register(new CatBowlBlock(DyeColor.GRAY, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "gray_cat_bowl"));
+    public static final Block LIGHT_GRAY_Cat_BOWL = register(new CatBowlBlock(DyeColor.LIGHT_GRAY, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "light_gray_cat_bowl"));
+    public static final Block CYAN_Cat_BOWL = register(new CatBowlBlock(DyeColor.CYAN, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "cyan_cat_bowl"));
+    public static final Block PURPLE_Cat_BOWL = register(new CatBowlBlock(DyeColor.PURPLE, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "purple_cat_bowl"));
+    public static final Block BLUE_Cat_BOWL = register(new CatBowlBlock(DyeColor.BLUE, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "blue_cat_bowl"));
+    public static final Block BROWN_Cat_BOWL = register(new CatBowlBlock(DyeColor.BROWN, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "brown_cat_bowl"));
+    public static final Block GREEN_Cat_BOWL = register(new CatBowlBlock(DyeColor.GREEN, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "green_cat_bowl"));
+    public static final Block RED_Cat_BOWL = register(new CatBowlBlock(DyeColor.RED, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "red_cat_bowl"));
+    public static final Block BLACK_Cat_BOWL = register(new CatBowlBlock(DyeColor.BLACK, Block.Properties.create(Material.WOOD).hardnessAndResistance(0.2F).notSolid()).setRegistryName(Reference.MOD_ID, "black_cat_bowl"));
 
     private static Block register(Block block)
     {
